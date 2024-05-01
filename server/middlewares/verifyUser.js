@@ -17,6 +17,7 @@ const verifyUser=(req,res,next)=>{
 
         req.user=user;
         next();
+        
     })
 
 
