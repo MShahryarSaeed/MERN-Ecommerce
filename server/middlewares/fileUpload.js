@@ -11,7 +11,7 @@ cloudinary.config({
     api_secret:process.env.CLOUDINARY_API_SECRET_KEY
 });
 
-// create storage Engine for multer 
+// create storage Engine for multer (Multer will store files here this location on cloudinary)
 const storage=new CloudinaryStorage({
     cloudinary:cloudinary,
     allowedFormats:["jpg","png","jpeg"],

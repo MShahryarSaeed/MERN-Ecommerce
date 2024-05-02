@@ -24,3 +24,8 @@ const verifyUser=(req,res,next)=>{
 }
 
 module.exports=verifyUser;
+
+
+// (error, user) => { ... }: This is a callback function that will be called once the verification process is complete. It takes two parameters:
+// error: If an error occurs during verification, it will be passed to this parameter.
+// user: If the token is successfully verified, the decoded user information (contained in the JWT payload) will be passed to this parameter.
