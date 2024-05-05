@@ -78,7 +78,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (request, 
 //Middleware
 app.use(express.json());
 app.use(cookieParser()); //To parse the cookies sent by the clients
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use((req,res,next)=>{
 
   console.log(`Incomming ${req.method} Request on URL : ${req.url}`);

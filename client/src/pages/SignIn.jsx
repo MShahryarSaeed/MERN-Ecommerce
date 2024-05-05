@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, Label, Button } from 'flowbite-react';
+import { TextInput, Label, Button, Alert } from 'flowbite-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInStart,signInSuccess,signInFailure } from '../Redux/userReducers/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,9 +27,10 @@ const SignIn = () => {
 
             dispatch(signInStart());
 
-            const response=await fetch(`https://mern-ecommerce-backend-one.vercel.app/api/auth/signin`,{
+            const response=await fetch(`/api/auth/signin`,{
                 method:'POST',
                 body:JSON.stringify(formData),
+                credentials:'include',
                 headers:{
                     'Content-Type':'application/json'
                 }
@@ -84,7 +85,7 @@ const SignIn = () => {
                             {isLoading ? 'Loading...' : 'Sign In'}
                         </Button>
 
-                        {error && <p className='text-red-500'>{error}</p>}
+                        {error && <Alert color={"failure"}>{error}</Alert>}
 
                     </form>
                     <div className="flex gap-2 mt-2 text-sm px-4">

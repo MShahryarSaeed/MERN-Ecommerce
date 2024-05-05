@@ -20,7 +20,7 @@ const Header = () => {
         try {
             dispatch(signoutUserStart());
 
-            const response = await fetch(`https://mern-ecommerce-backend-one.vercel.app/api/auth/signout`, {
+            const response = await fetch(`/api/auth/signout`, {
                 method: 'POST'
             });
 
@@ -51,6 +51,7 @@ const Header = () => {
                 {currentUser ? (
                     <>
                         <Button className="h-10 w-12 inline " color={"gray"} pill onClick={() => dispatch(changeTheme())}>{theme === 'light' ? <FaMoon /> : <FaSun />}</Button>
+                        
                         <Dropdown
                             arrowIcon={false}
                             inline

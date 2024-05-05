@@ -26,7 +26,7 @@ const SignUp = () => {
             setError(null);
             setIsLoading(true);
 
-            const response=await fetch(`https://mern-ecommerce-backend-one.vercel.app/api/auth/signup`,{
+            const response=await fetch(`/api/auth/signup`,{
                 method:'POST',
                 body:JSON.stringify(formData),
                 headers:{

@@ -1,77 +1,92 @@
+import { useState } from 'react';
 import { Button } from 'flowbite-react';
-import React, { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const DashProfile = () => {
 
+    // const dispatch = useDispatch();
     const { currentUser } = useSelector(state => state.user);
-    const filePickerRef=useRef();
 
-    const[formData,setFormData]=useState({
-        fullname:'',
-        email:'',
-        password:'',
-        profilePicture:''
+    const [formData, setFormData] = useState({
+        fullname: currentUser.fullname,
+        email: currentUser.email,
+        password: '',
+        profilePicture: null
     });
 
-    const handleImageChange=(e)=>{
-        setFormData({...formData,profilePicture:e.target.files[0]});
-    }
+    const handleInputChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-    const submitHandler=async(e)=>{
+    const handleImageChange = (e) => {
+        setFormData({ ...formData, profilePicture: e.target.files[0] });
+    };
 
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try{
+        try {
 
-            const response=await fetch(`http://localhost:3000/api/users/updateProfile/${currentUser._id}`,{
-                method:'PUT',
-                body:JSON.stringify(formData),
-                headers:{
-                    'Content-Type':'application/file'
-                }
-            });
+            const formDataToSend = new FormData();
 
-            const json=await response.json();
-
-            if(response.ok){
-                console.log(formData);
-                console.log("Success");
-            }else{
-                console.log(json.error);
+            if(formData.fullname!==currentUser.fullname){
+                formDataToSend.append('fullname', formData.fullname);
+                console.log("Name :",formData.fullname);
             }
 
-        }catch(error){
-            console.log(error.message);
-        }
+            if(formData.email !==currentUser.email){
+                formDataToSend.append('email', formData.email);
+                console.log("E :",formData.email);
+            }
 
-       
-    }
+            if (formData.password !=='') {
+                formDataToSend.append('password', formData.password);
+                console.log( "Password:",formData.password);
+            }
+            
+            if(formData.profilePicture!==null){
+                formDataToSend.append('profilePicture', formData.profilePicture);
+                console.log( "Picture :",formData.profilePicture);
+            }
+
+            
+
+            // console.log(formDataToSend);
+            
+
+            const response = await fetch(`/api/users/updateProfile/${currentUser._id}`, {
+                method: 'PUT',
+                body: formDataToSend
+            });
+
+            if (response.ok) {
+                // Update user information in Redux store
+                // const updatedUser = await response.json();
+                // dispatch({ type: 'UPDATE_USER', payload: updatedUser.user });
+                console.log("User updated successfully");
+            } else {
+                const error = await response.json();
+                console.log(error.error);
+            }
+
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    };
 
     return (
         <div className='mx-auto w-full max-w-lg p-3'>
-
-            <h1 className='text-xl text-center italic my-4 font-semibold'>Profile Section</h1>
-
-            <form className='flex flex-col gap-4' onSubmit={submitHandler}>
-
-            <input ref={filePickerRef} type="file" accept="image/*" onChange={handleImageChange} hidden />
-
-                <div className="relative h-32 w-32 cursor-pointer self-center overflow-hidden rounded-full shadow-md"
-                    onClick={() => filePickerRef.current.click()}>
-                    <img
-                        className={`h-full w-full rounded-full border-8 border-[lightgray] object-cover `}
-                        src={currentUser.profilePicture}
-                        alt={currentUser.fullname}
-                    />
-                </div>
-
+            <h1 className='text-xl text-center italic my-4 font-semibold'>Update Profile</h1>
+            <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+                <input type="text" name="fullname" value={formData.fullname} onChange={handleInputChange} placeholder="Full Name" />
+                <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="Email" />
+                <input type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder="Password" />
+                <input type="file" accept="image/*" onChange={handleImageChange} />
                 <Button type='submit'>Update Profile</Button>
-
             </form>
-
         </div>
-    )
-}
+    );
+};
 
-export default DashProfile
+export default DashProfile;

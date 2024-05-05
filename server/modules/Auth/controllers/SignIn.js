@@ -26,7 +26,7 @@ const SignIn=async(req,res)=>{
 
     const{password:pass,...rest}=getUser._doc;
 
-    res.cookie('accessToken',accessToken,{httpOnlye:true}).status(200).json({
+    res.cookie('accessToken',accessToken,{httpOnly:true}).status(200).json({
         status:"Success",
         message:"User Logged In Successfully",
         user:rest
