@@ -1,15 +1,27 @@
-import { Button } from "flowbite-react";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Components
+import Header from './components/Header';
+
+
+// Pages
+import SignUp from './pages/SignUp';
+import Home from './pages/Home';
 
 function App() {
-  
+
 
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-    <Button>Click me</Button>;
-    </>
+    <BrowserRouter>
+
+      <Header />
+
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/sign-up' element={<SignUp />} />
+      </Routes>
+
+    </BrowserRouter>
   )
 }
 

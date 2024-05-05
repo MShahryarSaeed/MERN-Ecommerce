@@ -14,6 +14,7 @@ const orderRoutes = require("./modules/orders/orders.routes");
 const userRoutes = require("./modules/users/users.routes");
 const couponRoutes = require("./modules/coupons/coupons.routes");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY); //to integrate stripe using webhook
+const cors=require("cors");
 
 // Instance of express (app)
 const app = express();
@@ -77,6 +78,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (request, 
 //Middleware
 app.use(express.json());
 app.use(cookieParser()); //To parse the cookies sent by the clients
+app.use(cors());
 app.use((req,res,next)=>{
 
   console.log(`Incomming ${req.method} Request on URL : ${req.url}`);
