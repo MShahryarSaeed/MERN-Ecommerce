@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { TextInput, Label, Button } from 'flowbite-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signInStart,signInSuccess,signInFailure } from '../Redux/userReducers/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const SignIn = () => {
 
     const dispatch=useDispatch();
+    const navigate=useNavigate();
     const{isLoading,error}=useSelector(state=>state.user);
 
     const[formData,setFormData]=useState({
@@ -38,7 +39,8 @@ const SignIn = () => {
 
             if(response.ok){
                 console.log(formData);
-                dispatch(signInSuccess(json.user))
+                dispatch(signInSuccess(json.user));
+                navigate("/")
             }else{
                 console.log(json.error);
                 dispatch(signInFailure(json.error))
@@ -78,7 +80,9 @@ const SignIn = () => {
                             <Label value='Enter Your Password' />
                             <TextInput type='password' placeholder='Enter Your Password here...' name='password' value={formData.password} onChange={changeHandler} />
                         </div>
-                        <Button disabled={isLoading} outline gradientDuoTone={"purpleToBlue"} type="submit" className='italic'>Create Account</Button>
+                        <Button disabled={isLoading} outline gradientDuoTone={"purpleToBlue"} type="submit" className='italic'>
+                            {isLoading ? 'Loading...' : 'Sign In'}
+                        </Button>
 
                         {error && <p className='text-red-500'>{error}</p>}
 

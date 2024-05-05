@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { TextInput, Label, Button } from 'flowbite-react';
-import { Link } from 'react-router-dom';
+import { TextInput, Label, Button,Alert } from 'flowbite-react';
+import { Link,useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
+
+    const navigate=useNavigate();
+    const [isLoading,setIsLoading]=useState(false);
+    const[error,setError]=useState(null);
 
     const[formData,setFormData]=useState({
         fullname:'',
@@ -19,6 +23,8 @@ const SignUp = () => {
         e.preventDefault();
 
         try{
+            setError(null);
+            setIsLoading(true);
 
             const response=await fetch(`https://mern-ecommerce-backend-one.vercel.app/api/auth/signup`,{
                 method:'POST',
@@ -32,8 +38,13 @@ const SignUp = () => {
 
             if(response.ok){
                 console.log(formData);
+                navigate("/sign-in");
+                setIsLoading(false);
+                setError(null);
             }else{
                 console.log(json.error);
+                setError(json.error);
+                setIsLoading(false);
             }
 
         }catch(error){
@@ -75,7 +86,12 @@ const SignUp = () => {
                             <Label value='Enter Your Password' />
                             <TextInput type='password' placeholder='Enter Your Password here...' name='password' value={formData.password} onChange={changeHandler} />
                         </div>
-                        <Button outline gradientDuoTone={"purpleToBlue"} type="submit" className='italic'>Create Account</Button>
+
+                        <Button disabled={isLoading} outline gradientDuoTone={"purpleToBlue"} type="submit" className='italic'>
+                            {isLoading ? '...Loading' :"Create Account"}
+                        </Button>
+
+                        {error && <Alert color={"red"}>{error}</Alert> }
 
                     </form>
                     <div className="flex gap-2 mt-2 text-sm px-4">
