@@ -5,6 +5,7 @@ const usersSchema = new mongoose.Schema({
     fullname: {
         type: String,
         required: [true, "Users Fullname is Required"],
+        unique: true
     },
     email: {
         type: String,
@@ -16,10 +17,10 @@ const usersSchema = new mongoose.Schema({
         required: [true, "Users Password is Required"],
     },
     orders: [
-        //orders is an array of order which store the Mongoose Id's of each order that created by this user and we can see this order using populate method
+        //orders is an array of orders which store the Mongoose Id's of each order  created by this user and we can see this order using populate method
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "orders" //orders is the name of the model
+            ref: "orders" //orders is the name of  the order model
         }
     ],
     whisLists: [

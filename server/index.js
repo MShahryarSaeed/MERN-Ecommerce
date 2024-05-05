@@ -13,7 +13,9 @@ const reviewRoutes = require("./modules/Reviews/reviews.routes");
 const orderRoutes = require("./modules/orders/orders.routes");
 const userRoutes = require("./modules/users/users.routes");
 const couponRoutes = require("./modules/coupons/coupons.routes");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY); //to integrate stripe using webhook
+
+// Instance of express (app)
 const app = express();
 
 // Stripe webhook
@@ -69,19 +71,26 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (request, 
 
   // Return a 200 response to acknowledge receipt of the event
   response.send();
+
 });
 
 //Middleware
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser()); //To parse the cookies sent by the clients
+app.use((req,res,next)=>{
 
-// Connection
+  console.log(`Incomming ${req.method} Request on URL : ${req.url}`);
+  next();
+  
+})
+
+// Connection with our MongoDB Database
 mongoose.connect(process.env.MONGO_URL, {})
   .then(() => console.log("Connected to MongoDB Database Successfully"))
   .catch((error) => console.log(`Error While Connecting to Database.${error}`));
 
 
-// Models
+// Mongoose Models
 require("./models/user.model");
 require("./models/product.model");
 require("./models/category.model");
@@ -110,7 +119,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api/coupons', couponRoutes);
 
-// Error Handling MiddleWare
+// Error Handling MiddleWare to Handle Errors
 app.use(errorHandler);
 
 // Server initialization
