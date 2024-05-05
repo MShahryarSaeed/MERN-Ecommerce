@@ -39,4 +39,7 @@ CLOUDINARY_API_SECRET_KEY=...
    npm start
 
 ```
-
+## API Host URL
+``` bash
+https://mern-ecommerce-backend-one.vercel.app
+```
