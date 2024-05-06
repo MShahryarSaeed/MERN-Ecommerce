@@ -13,7 +13,7 @@
 //                 fullname:req.body.fullname,
 //                 email:req.body.email,
 //                 password:req.body.password,
-//                 profilePicture: req.file.path 
+//                 profilePicture:req.file.path 
 //             }
 //         },
 //         {
