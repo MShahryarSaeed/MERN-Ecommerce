@@ -56,7 +56,7 @@ const DashProfile = () => {
 
                 formDataToSend.append('password', formData.password);
 
-            } 
+            }
 
             if (formData.profilePicture !== null) {
                 formDataToSend.append('profilePicture', formData.profilePicture);
