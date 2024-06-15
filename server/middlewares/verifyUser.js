@@ -9,6 +9,7 @@ const verifyUser=(req,res,next)=>{
     jsonwebtoken.verify(accessToken,process.env.JWT_SECRET,(error,user)=>{
 
         if(error){
+            
             return res.status(401).json({
                 status:"Failed",
                 error:"Unauthorized Access"

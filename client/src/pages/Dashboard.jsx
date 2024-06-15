@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import DashSidebar from "../components/DashSidebar"
 import { useLocation } from "react-router-dom";
 import DashProfile from "../components/DashProfile";
+import DashCreateProduct from "../components/DashCreateProduct";
+import DashManageProducts from "../components/DashManageProducts";
 
 const Dashboard = () => {
 
@@ -28,6 +30,8 @@ const Dashboard = () => {
             </div>
 
             {tab === 'profile' && <DashProfile />}
+            {tab==='createProduct' && <DashCreateProduct/>}
+            {tab==="manageProducts" && <DashManageProducts/>}
 
         </div>
     )

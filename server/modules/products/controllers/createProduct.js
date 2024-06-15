@@ -11,7 +11,9 @@ const createProduct=async(req,res)=>{
     // Check if the user is admin
     if(!req.user.isAdmin) throw "You are Not Allowed to Create Product";
 
-    const { name, description, category, sizes, colors , price, totalQty, brand }= req.body;
+    let { name, description, category, sizes, colors , price, totalQty, brand }= req.body;
+    sizes=JSON.parse(sizes);
+    colors=JSON.parse(colors);
 
     const productExists=await productModel.findOne({name:name});
 

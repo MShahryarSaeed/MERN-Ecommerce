@@ -1,26 +1,29 @@
+//Import Dependencies
 require("dotenv").config();
 require("express-async-errors");
+const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-const express = require("express");
+const cors=require("cors");
+//Imports Files
 const errorHandler = require("./handlers/errorHandler");
 const authRoutes = require("./modules/Auth/auth.routes");
-const productRoutes = require("./modules/products/product.routes");
+const userRoutes = require("./modules/users/users.routes");
 const categoryRoutes = require("./modules/categories/categorys.routes");
 const brandRoutes = require("./modules/Brands/brands.routes");
 const colorRoutes = require("./modules/colors/colors.routes");
+const productRoutes = require("./modules/products/product.routes");
 const reviewRoutes = require("./modules/Reviews/reviews.routes");
 const orderRoutes = require("./modules/orders/orders.routes");
-const userRoutes = require("./modules/users/users.routes");
 const couponRoutes = require("./modules/coupons/coupons.routes");
+
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY); //to integrate stripe using webhook
-const cors=require("cors");
+
 
 // Instance of express (app)
 const app = express();
 
 // Stripe webhook
-
 // This is your Stripe CLI webhook secret for testing your endpoint locally.
 const endpointSecret = process.env.ENDPOINTSECRET;
 
@@ -49,7 +52,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (request, 
     const orderModel = mongoose.model("orders");
 
     const order = await orderModel.findByIdAndUpdate(
-      JSON.parse(orderId),
+      JSON.parse(orderId), //converts the orderId string (which should be a valid JSON) into a JavaScript object or value
       {
         $set: {
           totalPrice: totalAmount / 100,
@@ -79,15 +82,17 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (request, 
 app.use(express.json());
 app.use(cookieParser()); //To parse the cookies sent by the clients
 app.use(cors({ origin: 'http://localhost:5173' }));
+
 app.use((req,res,next)=>{
 
   console.log(`Incomming ${req.method} Request on URL : ${req.url}`);
+
   next();
   
 })
 
 // Connection with our MongoDB Database
-mongoose.connect(process.env.MONGO_URL, {})
+mongoose.connect(process.env.MONGO, {})
   .then(() => console.log("Connected to MongoDB Database Successfully"))
   .catch((error) => console.log(`Error While Connecting to Database.${error}`));
 
@@ -113,10 +118,10 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/brands', brandRoutes);
 app.use('/api/colors', colorRoutes);
+app.use('/api/products', productRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api/coupons', couponRoutes);
