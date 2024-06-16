@@ -14,7 +14,7 @@ const productRoutes=express.Router();
 productRoutes.get('/GetAllProducts',GetAllProducts);
 productRoutes.post('/createProduct',verifyUser,isAdminMiddleware,upload.array("files"),createProduct);
 productRoutes.get('/GetSingleProduct/:productId',GetSingleProduct);
-productRoutes.put('/UpdateProduct/:productId',verifyUser,isAdminMiddleware,UpdateProduct);
+productRoutes.put('/UpdateProduct/:productId',verifyUser,isAdminMiddleware,upload.array('files'),UpdateProduct);
 productRoutes.delete('/DeleteProduct/:productId',verifyUser,isAdminMiddleware,DeleteProduct);
 
 module.exports=productRoutes

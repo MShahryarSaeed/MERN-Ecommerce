@@ -5,7 +5,7 @@ const GetAllProducts = async (req, res) => {
   const productModel = mongoose.model("products");
 
   const priceRange = req.query.price?.split("-");
-  
+
   const page = parseInt(req.query.page) ? parseInt(req.query.page) : 1;
   const limit = parseInt(req.query.limit) ? parseInt(req.query.limit) : 10;
   const startIndex = (page - 1) * limit;
@@ -49,7 +49,7 @@ const GetAllProducts = async (req, res) => {
     results: products.length,
     pagination: pagination
   });
-  
+
 }
 
 module.exports = GetAllProducts;

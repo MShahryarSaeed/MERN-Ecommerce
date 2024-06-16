@@ -10,40 +10,79 @@ import {
     Button,
     Alert,
 } from "flowbite-react";
+import { useLocation } from "react-router-dom";
 
-const DashCreateProduct = () => {
+const DashUpdateProduct = () => {
+
     const { currentUser } = useSelector((state) => state.user);
+    const location = useLocation();
 
     const [formData, setFormData] = useState({
         name: "",
         description: "",
         category: "",
-        sizes: [], //[]
-        colors: [],//[]
+        sizes: [],
+        colors: [],
         price: "",
         totalQty: "",
         brand: "",
         files: [],
     });
 
-    console.log("FormData :", formData);
+    console.log("F :",formData);
 
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
-
     const [successMessage, setSuccessMessage] = useState("");
 
+    const[productId,setProductId]=useState(null);
+
     useEffect(() => {
-        // Fetch categories and brands from your API
+
+        const URLParams = new URLSearchParams(location.search);
+        const productId = URLParams.get("productId");
+        
+
+        if(productId){
+            setProductId(productId);
+            console.log("Product ID:",productId);
+        }
+
+        const fetchProductDetails = async (productId) => {
+            try {
+
+                const response = await fetch(`/api/products/GetSingleProduct/${productId}`);
+
+                const json = await response.json();
+
+                if (response.ok) {
+                    console.log('Product details fetched successfully:', json.product);
+                    setFormData({
+                        ...json.product,
+                        // sizes: JSON.parse(json.product.sizes),
+                        // colors: JSON.parse(json.product.colors),
+                        files: [], // Files are not fetched, they need to be re-uploaded
+                    });
+                }else{
+                    console.error('Error fetching product details:', json.error);
+                }
+            } catch (error) {
+                console.error('Error fetching product details:', error);
+            }
+        };
+
         const fetchCategories = async () => {
             try {
+
                 const response = await fetch("/api/categories/GetAllCategories");
                 const json = await response.json();
+
                 if (response.ok) {
                     setCategories(json.categories);
                 } else {
                     console.log(json.error);
                 }
+
             } catch (error) {
                 console.log(error);
             }
@@ -51,124 +90,58 @@ const DashCreateProduct = () => {
 
         const fetchBrands = async () => {
             try {
+
                 const response = await fetch("/api/brands/GetAllBrands");
                 const json = await response.json();
+
                 if (response.ok) {
                     setBrands(json.brands);
                 } else {
                     console.log(json.error);
                 }
+
             } catch (error) {
                 console.log(error);
             }
         };
 
-        if (currentUser.isAdmin) {
+        if (currentUser.isAdmin && productId) {
+            fetchProductDetails(productId);
             fetchCategories();
             fetchBrands();
         }
-    }, [currentUser.isAdmin]);
+    }, [currentUser.isAdmin, location.search]);
 
     const handleChange = (e) => {
-
         const { name, value } = e.target;
-
         setFormData({ ...formData, [name]: value });
-
     };
 
     const handleFileChange = (e) => {
-        setFormData({ ...formData, files: e.target.files, });
+        setFormData({ ...formData, files: e.target.files }); //All image Files
     };
 
-    // const handleSubmit = async (e) => {
-
-    //     e.preventDefault();
-
-    //     const data = new FormData();
-    //     for (let key in formData) {
-    //         if (key === "files") {
-    //             for (let i = 0; i < formData.files.length; i++) {
-    //                 data.append("files", formData.files[i]);
-    //             }
-    //         } else {
-    //             data.append(key, formData[key]);
-    //         }
-    //     }
-
-    //     try {
-    //         const response = await fetch("/api/products/createProduct", {
-    //             method: "POST",
-    //             body: data,
-    //         });
-    //         const json = await response.json();
-    //         if (response.ok) {
-    //             console.log("Product created successfully:", json);
-    //         } else {
-    //             console.error("Error creating product:", json.error);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error creating product:", error);
-    //     }
-    // };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const data = new FormData();
-        for (let key in formData) {
-            if (key === "files") {
-                for (let i = 0; i < formData.files.length; i++) {
-                    data.append("files", formData.files[i]);
-                }
-            } else if (key === "sizes" || key === "colors") {
-                // Convert arrays to JSON strings
-                data.append(key, JSON.stringify(formData[key]));
-            } else {
-                data.append(key, formData[key]);
-            }
-        }
-
-        try {
-            const response = await fetch("/api/products/createProduct", {
-                method: "POST",
-                body: data,
-            });
-            const json = await response.json();
-            if (response.ok) {
-                console.log("Product created successfully:", json);
-                setSuccessMessage(json.message);
-            } else {
-                console.error("Error creating product:", json.error);
-            }
-        } catch (error) {
-            console.error("Error creating product:", error);
-        }
-    };
-
+  
 
     const handleSizeChange = (e) => {
+
         const { value, checked } = e.target;
+
         setFormData(prevFormData => {
             if (checked) {
-                // Add the size to the array
                 return { ...prevFormData, sizes: [...prevFormData.sizes, value] };
             } else {
-                // Remove the size from the array
                 return { ...prevFormData, sizes: prevFormData.sizes.filter(size => size !== value) };
             }
         });
     };
 
     const handleColorChange = (e) => {
-
         const { value, checked } = e.target;
         setFormData((prevFormData) => {
             if (checked) {
-                // Add the color to the array
                 return { ...prevFormData, colors: [...prevFormData.colors, value] };
             } else {
-                // Remove the color from the array
                 return {
                     ...prevFormData,
                     colors: prevFormData.colors.filter((color) => color !== value),
@@ -177,16 +150,54 @@ const DashCreateProduct = () => {
         });
     };
 
+    const handleSubmit = async (e) => {
+
+        e.preventDefault();
+        // const URLParams = new URLSearchParams(location.search);
+        // const productId = URLParams.get("productId");
+
+        const data = new FormData();
+        for (let key in formData) {
+            if (key === "files") {
+                for (let i = 0; i < formData.files.length; i++) {
+                    data.append("files", formData.files[i]);
+                }
+            } else if (key === "sizes" || key === "colors") {
+                data.append(key, JSON.stringify(formData[key]));
+            } else {
+                data.append(key, formData[key]);
+            }
+        }
+
+        console.log("Data :",data);
+
+        try {
+            const response = await fetch(`/api/products/UpdateProduct/${productId}`, {
+                method: "PUT",
+                body: data,
+            });
+
+            const json = await response.json();
+
+            if (response.ok) {
+                console.log("Product updated successfully:", json);
+                setSuccessMessage(json.message);
+            } else {
+                console.error("Error updating product:", json.error);
+            }
+        } catch (error) {
+            console.error("Error updating products:", error);
+        }
+    };
+
     return (
-
         <div className="mx-auto w-full mb-20">
-
             <form
                 onSubmit={handleSubmit}
                 className="mx-auto p-4 max-w-3xl flex flex-col gap-4"
             >
                 <h2 className="text-2xl font-bold mb-6 text-center italic">
-                    Create New Product
+                    Update Product
                 </h2>
 
                 <div>
@@ -199,7 +210,6 @@ const DashCreateProduct = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="Enter Product name here..."
                         required
                     />
                 </div>
@@ -238,10 +248,12 @@ const DashCreateProduct = () => {
                     </Select>
                 </div>
 
-                <div >
-                    <Label htmlFor="sizes" className='mb-1'>Sizes</Label>
+                <div>
+                    <Label htmlFor="sizes" className="mb-1">
+                        Sizes
+                    </Label>
                     <div className="flex flex-wrap gap-2">
-                        {["S", "M", "L", "XL", "XXL"].map(size => (
+                        {["S", "M", "L", "XL", "XXL"].map((size) => (
                             <div key={size} className="flex items-center">
                                 <Checkbox
                                     type="checkbox"
@@ -252,36 +264,35 @@ const DashCreateProduct = () => {
                                     onChange={handleSizeChange}
                                     className="mr-2 p-4"
                                 />
-                                <Label htmlFor={`size-${size}`} className='mb-0 text-lg'>{size}</Label>
+                                <Label htmlFor={`size-${size}`} className="mb-0">
+                                    {size}
+                                </Label>
                             </div>
                         ))}
                     </div>
                 </div>
-
 
                 <div>
                     <Label htmlFor="colors" className="mb-1">
                         Colors
                     </Label>
                     <div className="flex flex-wrap gap-2">
-                        {["Red", "Blue", "Green", "Yellow", "Black", "White"].map(
-                            (color) => (
-                                <div key={color} className="flex items-center">
-                                    <Checkbox
-                                        type="checkbox"
-                                        id={`color-${color}`}
-                                        name="colors"
-                                        value={color}
-                                        checked={formData.colors.includes(color)}
-                                        onChange={handleColorChange}
-                                        className="mr-2 p-4"
-                                    />
-                                    <Label htmlFor={`color-${color}`} className="mb-0">
-                                        {color}
-                                    </Label>
-                                </div>
-                            )
-                        )}
+                        {["Red", "Blue", "Green", "Yellow", "Black", "White"].map((color) => (
+                            <div key={color} className="flex items-center">
+                                <Checkbox
+                                    type="checkbox"
+                                    id={`color-${color}`}
+                                    name="colors"
+                                    value={color}
+                                    checked={formData.colors.includes(color)}
+                                    onChange={handleColorChange}
+                                    className="mr-2 p-4"
+                                />
+                                <Label htmlFor={`color-${color}`} className="mb-0">
+                                    {color}
+                                </Label>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
@@ -345,12 +356,11 @@ const DashCreateProduct = () => {
                         name="files"
                         onChange={handleFileChange}
                         multiple
-                        required
                     />
                 </div>
 
-                <Button type="submit" outline >
-                    Create Product
+                <Button type="submit" outline gradientDuoTone={"purpleToBlue"}>
+                    Update Product
                 </Button>
 
                 {successMessage && <Alert color={"success"}>{successMessage}</Alert>}
@@ -359,4 +369,4 @@ const DashCreateProduct = () => {
     );
 };
 
-export default DashCreateProduct;
+export default DashUpdateProduct;

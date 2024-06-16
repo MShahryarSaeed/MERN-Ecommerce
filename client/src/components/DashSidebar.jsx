@@ -2,7 +2,7 @@ import { Sidebar } from "flowbite-react";
 import { HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards } from "react-icons/hi";
 import { CiUser } from "react-icons/ci";
 import { FaShoppingCart } from "react-icons/fa";
-import { TbBrandShopee,TbCategory2  } from "react-icons/tb";
+import { TbBrandShopee, TbCategory2 } from "react-icons/tb";
 import { SiGoogleanalytics } from "react-icons/si";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react"
@@ -94,11 +94,11 @@ const DashSidebar = () => {
                     )
 
                     }
-                    
+
                     <Sidebar.Item href="#" icon={HiArrowSmRight}>
                         Sign Out
                     </Sidebar.Item>
-                  
+
                 </Sidebar.ItemGroup>
             </Sidebar.Items>
         </Sidebar>

@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import DashProfile from "../components/DashProfile";
 import DashCreateProduct from "../components/DashCreateProduct";
 import DashManageProducts from "../components/DashManageProducts";
+import DashUpdateProduct from "../components/DashUpdateProduct";
 
 const Dashboard = () => {
 
@@ -32,6 +33,7 @@ const Dashboard = () => {
             {tab === 'profile' && <DashProfile />}
             {tab==='createProduct' && <DashCreateProduct/>}
             {tab==="manageProducts" && <DashManageProducts/>}
+            {tab==="updateProduct" && <DashUpdateProduct/>}
 
         </div>
     )
