@@ -39,6 +39,8 @@ const UpdateProduct = async (req, res) => {
         message: "Product Updated Successfully",
         Updatedproduct: product
     });
+
+    
 }
 
 module.exports = UpdateProduct;
