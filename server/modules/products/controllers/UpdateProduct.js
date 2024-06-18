@@ -36,7 +36,7 @@ const UpdateProduct = async (req, res) => {
 
     res.status(200).json({
         status: "Success",
-        message: "Product Updated Successfully",
+        message: "Product Updated SuccessfullY",
         Updatedproduct: product
     });
 
