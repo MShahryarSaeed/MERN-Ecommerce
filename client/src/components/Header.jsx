@@ -1,7 +1,7 @@
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import {signoutUserStart, signoutUserSuccess,signoutUserFailure } from "../Redux/userReducers/userSlice";
+import { signoutUserStart, signoutUserSuccess, signoutUserFailure } from "../Redux/userReducers/userSlice";
 import { changeTheme } from "../Redux/theme/themeSlice";
 import { FaMoon, FaSun } from "react-icons/fa";
 
@@ -18,6 +18,7 @@ const Header = () => {
     const handleSignout = async () => {
 
         try {
+
             dispatch(signoutUserStart());
 
             const response = await fetch(`/api/auth/signout`, {
@@ -36,22 +37,31 @@ const Header = () => {
 
 
         } catch (error) {
+
             console.log(error.message);
+
         }
 
     }
 
     return (
         <Navbar fluid rounded>
+
             <Navbar.Brand to="/">
-                <img src="/Logo-removebg-preview.png" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
+                <Link to='/'>
+                    <img src="/Logo-removebg-preview.png" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
+                </Link>
                 <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white italic">MERN <span className="md:inline hidden">Ecommerce</span></span>
             </Navbar.Brand>
+
             <div className="flex items-center gap-4 md:order-2">
+
                 {currentUser ? (
                     <>
-                        <Button className="h-10 w-12 inline " color={"gray"} pill onClick={() => dispatch(changeTheme())}>{theme === 'light' ? <FaMoon /> : <FaSun />}</Button>
-                        
+                        <Button className="h-10 w-12 inline " color={"gray"} pill onClick={() => dispatch(changeTheme())}>
+                            {theme === 'light' ? <FaMoon /> : <FaSun />}
+                            </Button>
+
                         <Dropdown
                             arrowIcon={false}
                             inline
@@ -67,7 +77,7 @@ const Header = () => {
                                 <Link to="/dashboard?tab=profile">Profile</Link>
                             </Dropdown.Item>
                             <Dropdown.Item>Orders Status</Dropdown.Item>
-                            <Dropdown.Item>Earnings</Dropdown.Item>
+                            {/* <Dropdown.Item>Earnings</Dropdown.Item> */}
                             <Dropdown.Divider />
                             <Dropdown.Item onClick={handleSignout}>Sign out</Dropdown.Item>
                         </Dropdown>
