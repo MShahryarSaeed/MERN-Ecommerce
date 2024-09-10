@@ -16,6 +16,7 @@ import Testing from './pages/Testing';
 
 function App() {
   return (
+
     <BrowserRouter>
 
       <Header />
@@ -23,25 +24,24 @@ function App() {
       <Routes>
 
         <Route path='/' element={<Home />} />
+
         <Route path='/sign-up' element={<SignUp />} />
+
         <Route path='/sign-in' element={<SignIn />} />
+        
 
-        <Route element={<ProtectedRoute/>}>
+        <Route element={<ProtectedRoute />}>
 
-        <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route path='/dashboard' element={<Dashboard />} />
 
         </Route>
 
-       <Route element={<AdminProtectedroutes/>}>
+        <Route element={<AdminProtectedroutes />}>
 
-       <Route path='/dashboard?tab=createProduct' element={<DashCreateProduct/>}/>
-       <Route path='/testing' element={<Testing/>}/>
-       
-       </Route>
-       
+          <Route path='/dashboard?tab=createProduct' element={<DashCreateProduct />} />
+          <Route path='/testing' element={<Testing />} />
 
-      
-
+        </Route>
 
       </Routes>
 

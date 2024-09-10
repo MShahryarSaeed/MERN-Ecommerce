@@ -18,22 +18,24 @@ const Dashboard = () => {
         const tabFromURL = URLParams.get("tab");
 
         if (tabFromURL) {
-            setTab(tabFromURL)
+            setTab(tabFromURL);
         }
 
     }, [location.search])
 
 
     return (
+
         <div className='min-h-screen flex flex-col  md:flex-row'>
+            
             <div className="md:w-56">
                 <DashSidebar />
             </div>
 
             {tab === 'profile' && <DashProfile />}
-            {tab==='createProduct' && <DashCreateProduct/>}
-            {tab==="manageProducts" && <DashManageProducts/>}
-            {tab==="updateProduct" && <DashUpdateProduct/>}
+            {tab === 'createProduct' && <DashCreateProduct />}
+            {tab === "manageProducts" && <DashManageProducts />}
+            {tab === "updateProduct" && <DashUpdateProduct />}
 
         </div>
     )

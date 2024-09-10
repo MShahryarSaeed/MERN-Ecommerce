@@ -1,49 +1,49 @@
 const orderModel = require("../../../models/order.model");
 
 
-const getOrderStats=async(req,res)=>{
+const getOrderStats = async (req, res) => {
 
-    const orders=await orderModel.aggregate([
+    const orders = await orderModel.aggregate([
         {
-            $group:{
-                _id:null,
-                minimumSales:{
-                    $min:"$totalPrice"
+            $group: {
+                _id: null,
+                minimumSales: {
+                    $min: "$totalPrice"
                 },
-                totalSales:{
-                    $sum:"$totalPrice"
+                totalSales: {
+                    $sum: "$totalPrice"
                 },
-                maximumSales:{
-                    $max:"$totalPrice"
+                maximumSales: {
+                    $max: "$totalPrice"
                 },
-                avgSale:{
-                    $avg:"$totalPrice"
+                avgSale: {
+                    $avg: "$totalPrice"
                 }
             }
         }
     ]);
 
     // GET todays sales
-    const date=new Date();
-    const today=new Date(
+    const date = new Date();
+    const today = new Date(
         date.getFullYear(),
         date.getMonth(),
         date.getDate()
     );
-    
-    const SalesToday=await orderModel.aggregate([
+
+    const SalesToday = await orderModel.aggregate([
         {
-            $match:{
-                createdAt:{
-                    $gte:today
+            $match: {
+                createdAt: {
+                    $gte: today
                 }
             }
         },
         {
-            $group:{
-                _id:null,
-                totalSalesToday:{
-                    $sum:"$totalPrice"
+            $group: {
+                _id: null,
+                totalSalesToday: {
+                    $sum: "$totalPrice"
                 }
             }
         }
@@ -51,11 +51,11 @@ const getOrderStats=async(req,res)=>{
 
 
     res.status(200).json({
-        status:"Success",
-        message:"Order Stats Fetched Successfully",
-        orders:orders,
-        SalesToday:SalesToday
+        status: "Success",
+        message: "Order Stats Fetched Successfully",
+        orders: orders,
+        SalesToday: SalesToday
     });
 }
 
-module.exports={getOrderStats};
+module.exports = { getOrderStats };

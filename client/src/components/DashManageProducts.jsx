@@ -31,7 +31,7 @@ const DashManageProducts = () => {
                 if (response.ok) {
 
                     setProducts(json.products);
-                    console.log(json.products);
+                    console.log("Products :",json.products);
 
                     setIsLoading(false);
 

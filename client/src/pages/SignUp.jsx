@@ -5,6 +5,7 @@ import { Link,useNavigate } from 'react-router-dom';
 const SignUp = () => {
 
     const navigate=useNavigate();
+
     const [isLoading,setIsLoading]=useState(false);
     const[error,setError]=useState(null);
 
@@ -23,6 +24,7 @@ const SignUp = () => {
         e.preventDefault();
 
         try{
+
             setError(null);
             setIsLoading(true);
 
@@ -37,14 +39,17 @@ const SignUp = () => {
             const json=await response.json();
 
             if(response.ok){
-                console.log(formData);
+                // console.log(formData);
                 navigate("/sign-in");
                 setIsLoading(false);
                 setError(null);
+
             }else{
+
                 console.log(json.error);
                 setError(json.error);
                 setIsLoading(false);
+                
             }
 
         }catch(error){

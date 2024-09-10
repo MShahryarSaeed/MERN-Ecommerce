@@ -4,7 +4,7 @@ require("express-async-errors");
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-const cors=require("cors");
+const cors = require("cors");
 //Imports Files
 const errorHandler = require("./handlers/errorHandler");
 const authRoutes = require("./modules/Auth/auth.routes");
@@ -84,12 +84,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); //To parse the cookies sent by the clients
 app.use(cors({ origin: 'http://localhost:5173' }));
 
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
 
   console.log(`Incomming ${req.method} Request on URL : ${req.url}`);
 
   next();
-  
+
 })
 
 // Connection with our MongoDB Database
@@ -110,7 +110,7 @@ require("./models/coupon.model");
 
 // Routes
 app.get("/api/success", (req, res) => {
-  res.send("Payment Successfull");
+  res.send("Payment Successfully");
 });
 
 app.get('/', (req, res) => {

@@ -14,10 +14,10 @@ const createOrder = async (req, res) => {
     const couponFound = await couponModel.findOne({ code: coupon });
     if (!couponFound) throw "Coupon Does Not Exists!";
 
-    if(couponFound?.isExpired) throw "Coupon Expired!";
+    if (couponFound?.isExpired) throw "Coupon Expired!";
 
     // GET Discount
-    const discount = couponFound?.discount/100;
+    const discount = couponFound?.discount / 100;
 
     const userModel = mongoose.model("users");//will store orderId in user model
     const orderModel = mongoose.model("orders"); //save order in order Model

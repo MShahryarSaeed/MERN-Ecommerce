@@ -29,23 +29,23 @@ const DashUpdateProduct = () => {
         files: [],
     });
 
-    console.log("F :",formData);
+    console.log("F :", formData);
 
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
 
-    const[productId,setProductId]=useState(null);
+    const [productId, setProductId] = useState(null);
 
     useEffect(() => {
 
         const URLParams = new URLSearchParams(location.search);
         const productId = URLParams.get("productId");
-        
 
-        if(productId){
+
+        if (productId) {
             setProductId(productId);
-            console.log("Product ID:",productId);
+            console.log("Product ID:", productId);
         }
 
         const fetchProductDetails = async (productId) => {
@@ -63,7 +63,7 @@ const DashUpdateProduct = () => {
                         // colors: JSON.parse(json.product.colors),
                         files: [], // Files are not fetched, they need to be re-uploaded
                     });
-                }else{
+                } else {
                     console.error('Error fetching product details:', json.error);
                 }
             } catch (error) {
@@ -121,7 +121,7 @@ const DashUpdateProduct = () => {
         setFormData({ ...formData, files: e.target.files }); //All image Files
     };
 
-  
+
 
     const handleSizeChange = (e) => {
 
@@ -169,7 +169,7 @@ const DashUpdateProduct = () => {
             }
         }
 
-        console.log("Data :",data);
+        console.log("Data :", data);
 
         try {
             const response = await fetch(`/api/products/UpdateProduct/${productId}`, {

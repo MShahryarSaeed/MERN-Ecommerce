@@ -12,6 +12,7 @@ import {
 } from "flowbite-react";
 
 const DashCreateProduct = () => {
+
     const { currentUser } = useSelector((state) => state.user);
 
     const [formData, setFormData] = useState({
@@ -55,6 +56,8 @@ const DashCreateProduct = () => {
                 const json = await response.json();
                 if (response.ok) {
                     setBrands(json.brands);
+                    console.log("Brands :",json.brands);
+                    
                 } else {
                     console.log(json.error);
                 }
@@ -67,6 +70,7 @@ const DashCreateProduct = () => {
             fetchCategories();
             fetchBrands();
         }
+        
     }, [currentUser.isAdmin]);
 
     const handleChange = (e) => {
